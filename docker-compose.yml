@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  client:
+    image: rayaraya1234/userservice-client:latest
+    container_name: client
+    ports:
+      - 8701:8701
+    environment:
+      - APP_USERSERVICEMAINURL=http://main:8700
+
+  main:
+    image: rayaraya1234/userservice-main:latest
+    container_name: main
+    ports:
+      - 8700:8700
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/us
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+
+  db:
+    image: postgres:13.1-alpine
+    container_name: db
+    environment:
+      - POSTGRES_DB=us
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
